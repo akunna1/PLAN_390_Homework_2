@@ -36,7 +36,7 @@ fire_incidents_data = read_csv("Fire_Incidents.csv")
 # response_time_secs- response time in seconds
 
 # New dataset created:
-# clean_fire_incidents_data - excludes NA data and negative numbers
+# clean_fire_incidents_data - excludes NA data and negative numbers for response time
 # station_summary
 #dispatch_hour_count
 
@@ -106,3 +106,10 @@ clean_fire_incidents_data$dispatch_hour <- as.factor(clean_fire_incidents_data$d
 dispatch_hour_count <- clean_fire_incidents_data %>% 
                         count(dispatch_hour, sort = TRUE)
 dispatch_hour_count
+
+#**Question 5**
+# How many of them are actual fires?
+
+# creating an actual fire data frame
+actual_fire_data <- fire_incidents_data[fire_incidents_data$incident_type < 200 & !(is.na(fire_incidents_data$incident_type)), ]
+actual_fire_data
