@@ -29,16 +29,16 @@ fire_incidents_data = read_csv("Fire_Incidents.csv")
 # apt_room - apartment or suite number, if applicable
 # GlobalID - numeric identifier
 
-#New columns created:
-#arrival_time - includes arrival date and time 
-#dispatch_time - includes dispatch date and time
-#cleared_time- includes cleared date and time
+# New columns created to the orginal dataset (fire_incidents_data):
+# arrival_time - includes arrival date and time 
+# dispatch_time - includes dispatch date and time
+# cleared_time- includes cleared date and time
 # response_time_secs- response time in seconds
 
 # New dataset created:
 # clean_fire_incidents_data - excludes NA data and negative numbers for response time
 # station_summary
-#dispatch_hour_count
+# dispatch_hour_count
 
 #**Question 1 and 2:**
 # How long it takes Wake County Fire to respond to incidents, on average
@@ -113,3 +113,8 @@ dispatch_hour_count
 # creating an actual fire data frame
 actual_fire_data <- fire_incidents_data[fire_incidents_data$incident_type < 200 & !(is.na(fire_incidents_data$incident_type)), ]
 actual_fire_data
+
+#**Question 6**
+# Evaluate the average response time to actual fires. 
+actual_fire_avg_response_time <- mean(as.numeric(actual_fire_data$response_time_secs), na.rm = TRUE)
+actual_fire_avg_response_time
