@@ -39,8 +39,10 @@ fire_incidents_data = read_csv("Fire_Incidents.csv")
 # clean_fire_incidents_data - excludes NA data and negative numbers for response time
 # station_summary
 # dispatch_hour_count
+# other...
 
 #**Question 1 and 2:**
+#( included summarise table for part 2 in write up)
 # How long it takes Wake County Fire to respond to incidents, on average
 # Does this response time vary by station? 
 #What stations have the highest and lowest average response times?
@@ -76,6 +78,7 @@ station_summary
  
 #**Question 3**
 # Has the response time been going up and down over time? What could be the reason?
+#(included plots for part 3 in write up)
 
 # changing the numeric values of station to factors. 
 clean_fire_incidents_data$station <- as.factor(clean_fire_incidents_data$station)
@@ -105,7 +108,7 @@ clean_fire_incidents_data$dispatch_hour <- as.factor(clean_fire_incidents_data$d
 
 dispatch_hour_count <- clean_fire_incidents_data %>% 
                         count(dispatch_hour, sort = TRUE)
-dispatch_hour_count
+dispatch_hour_count #view table
 
 #**Question 5**
 # How many of them are actual fires?
@@ -118,3 +121,51 @@ actual_fire_data
 # Evaluate the average response time to actual fires. 
 actual_fire_avg_response_time <- mean(as.numeric(actual_fire_data$response_time_secs), na.rm = TRUE)
 actual_fire_avg_response_time
+
+#**Question 7**
+# Repeat the analysis for questions 2-4 for actual fires
+
+# 2) Does this response time vary by station? 
+# What stations have the highest and lowest average response times?
+# (included summarise table for part 2 in write up)
+
+actual_fire_station_summary <- actual_fire_data%>%
+  group_by(station)%>%
+  summarise(Average=mean(response_time_secs, na.rm=TRUE),
+            Maximum=max(response_time_secs, na.rm = TRUE),
+            Minimum=min(response_time_secs, na.rm = TRUE),
+            Median=median(response_time_secs, na.rm = TRUE),
+            Standard_Deviation=sd(response_time_secs, na.rm = TRUE))
+
+actual_fire_station_summary
+
+# 3) Has the response time been going up and down over time? What could be the reason?
+# changing the numeric values of station to factors. 
+actual_fire_data$station <- as.factor(actual_fire_data$station)
+#(included plots for part 3 in write up)
+
+# Plotting a graph of the response time with their dates
+ggplot(data = actual_fire_data,
+       aes(x = as.Date(dispatch_time),
+           y = as.numeric(response_time_secs),
+           group = station,
+           colour = station)) +
+  geom_line() +
+  labs(title= " Actual Fires Response time vs Dispatch Date",
+       x = "Dispatch Date",
+       y = "Response time (in secs)") +
+  theme(axis.text.x = element_text(colour="grey20", size=12, angle=90, hjust=.5, vjust=.5),
+        axis.text.y = element_text(colour="grey20", size=12),
+        text=element_text(size=12))
+
+# 4) At what times of day are fire calls most likely to occur?
+
+# creating dispatch_hour from the dispatch_time column
+actual_fire_data$dispatch_hour <- format(as.POSIXct(actual_fire_data$dispatch_time), format = "%H") 
+
+# changing the time values of dispatch_hour to factors
+actual_fire_data$dispatch_hour <- as.factor(actual_fire_data$dispatch_hour)
+
+actual_fire_dispatch_hour_count <- actual_fire_data %>% 
+  count(dispatch_hour, sort = TRUE)
+actual_fire_dispatch_hour_count #view table
