@@ -28,6 +28,9 @@ fire_incidents_data = read_csv("Fire_Incidents.csv")
 # address, address2 - address and address line 2 for the incident
 # apt_room - apartment or suite number, if applicable
 # GlobalID - numeric identifier
+# CreationDate, EditDate - when the incident was entered into the system, and when the record
+# was last edited
+# Creator, Editor - who entered the incident, and who edited it most recently
 
 # New columns created to the orginal dataset (fire_incidents_data):
 # arrival_time - includes arrival date and time 
